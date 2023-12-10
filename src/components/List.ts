@@ -101,12 +101,12 @@ export class List {
       profile.classList.remove('active')
       this.profileText.classList.remove('active')
     })
-    tl.to(profile, { opacity: 0, duration: 0.5, ease: 'power2.in' })
+    tl.to(profile, { opacity: 0, duration: 0.5, y: '-8%', ease: 'power2.in' })
     tl.fromTo(
       card,
       { clipPath: 'inset(100% 0 0 0)', opacity: 0, y: '3%' },
       { clipPath: 'inset(0% 0 0 0)', opacity: 1, y: '0%', duration: 1.2, ease: 'power3.inOut' },
-      '<15%',
+      '<10%',
     )
   }
 }
