@@ -1,0 +1,6 @@
+@mixin crimson($weight: 300) {
+  font-family: 'Crimson Pro', serif;
+  font-weight: $weight;
+  font-style: italic;
+  font-synthesis: none;
+}

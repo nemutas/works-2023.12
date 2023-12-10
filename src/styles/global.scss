@@ -1,0 +1,39 @@
+@use './mixins/font.scss';
+
+* {
+  overscroll-behavior: none;
+}
+
+html {
+  font-size: calc(1000vw / 1440);
+  background: #000;
+  color: #fff;
+  @include font.crimson;
+}
+
+ul,
+li {
+  list-style: none;
+}
+
+img {
+  vertical-align: bottom;
+}
+
+a {
+  text-decoration: none;
+  color: inherit;
+}
+
+::selection {
+  color: #000;
+  background: #fffa;
+}
+
+.os-scrollbar {
+  --os-size: 8px;
+}
+
+.os-theme-light {
+  --os-handle-bg: hsla(0, 0%, 100%, 0.2);
+}

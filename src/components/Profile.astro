@@ -1,0 +1,55 @@
+<div class="profile">
+  <div>
+    <p>private works</p>
+    <div class="links">
+      <a href="https://twitter.com/focru_ino" target="_blank" rel="noopener noreferrer">X</a>
+      <a href="https://github.com/nemutas/" target="_blank" rel="noopener noreferrer">GitHub</a>
+      <a href="https://studio-spoon.co.jp/" target="_blank" rel="noopener noreferrer">Company</a>
+    </div>
+  </div>
+</div>
+
+<style lang="scss">
+  @use '../styles/mixins/media.scss' as *;
+
+  .profile {
+    position: absolute;
+    width: 100%;
+    padding-left: 20rem;
+    display: grid;
+    place-items: center;
+    letter-spacing: 0.02em;
+    user-select: none;
+    pointer-events: none;
+    opacity: 0;
+    will-change: transform;
+
+    &.active {
+      user-select: auto;
+      pointer-events: auto;
+    }
+
+    p {
+      font-size: max(2.5rem, 25px);
+      letter-spacing: 0.05em;
+      margin-bottom: 1.5rem;
+      opacity: 0.9;
+      padding-left: 0.5rem;
+    }
+
+    a {
+      font-size: max(1.6rem, 16px);
+      opacity: 0.3;
+      padding-left: 0.5rem;
+      &::after {
+        content: '.';
+      }
+      @include hoverable {
+        transition: opacity 0.2s;
+        &:hover {
+          opacity: 0.9;
+        }
+      }
+    }
+  }
+</style>

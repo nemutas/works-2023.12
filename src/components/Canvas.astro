@@ -1,0 +1,19 @@
+<canvas></canvas>
+
+<style lang="scss">
+  canvas {
+    position: fixed;
+    z-index: -1;
+    top: 0;
+    left: 0;
+    height: 100lvh !important;
+    width: 100%;
+    pointer-events: none;
+  }
+</style>
+
+<script>
+  import { Canvas } from '../scripts/webgl/Canvas'
+
+  new Canvas(document.querySelector<HTMLCanvasElement>('canvas')!)
+</script>

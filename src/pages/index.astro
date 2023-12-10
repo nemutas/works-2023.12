@@ -1,0 +1,107 @@
+---
+import Canvas from '../components/Canvas.astro'
+import Card from '../components/Card.astro'
+import List from '../components/List.astro'
+import Profile from '../components/Profile.astro'
+import Sp from '../components/Sp.astro'
+import Layout from '../layouts/Layout.astro'
+import { fetchWorks } from '../scripts/server/newt'
+
+const { years, works } = await fetchWorks()
+---
+
+<Layout title="nemutas. works.">
+  <main>
+    <Canvas />
+    <div class="pc">
+      <div class="layout">
+        <div class="card-sticky-container">
+          <div class="card-container">
+            <Card years={years} works={works} />
+            <Profile />
+          </div>
+        </div>
+        <div class="lists">
+          <p class="profile">profile</p>
+          {years.map((year) => <List class="year-list" year={year} works={works[year]} />)}
+        </div>
+      </div>
+    </div>
+    <Sp />
+  </main>
+</Layout>
+
+<style lang="scss">
+  @use '../styles/mixins/media.scss' as *;
+
+  .layout {
+    position: relative;
+    display: grid;
+    grid-template-columns: 1fr max(23rem, 200px);
+  }
+
+  .card-sticky-container {
+    position: relative;
+
+    .card-container {
+      position: sticky;
+      padding-right: 20rem;
+      top: 0;
+      height: 100lvh;
+      width: 100%;
+      display: grid;
+      align-items: center;
+      justify-content: flex-end;
+    }
+  }
+
+  .lists {
+    --scroll-progress: 0;
+    --offset: calc((100% - 100vh) * var(--scroll-progress));
+
+    position: relative;
+    padding-block: 10rem;
+    .year-list + .year-list {
+      margin-top: 3rem;
+    }
+
+    mask: linear-gradient(
+      transparent calc(0vh + var(--offset)),
+      #fff calc(15vh + var(--offset)),
+      #fff calc(85vh + var(--offset)),
+      transparent calc(100vh + var(--offset))
+    );
+
+    .profile {
+      padding-left: 0.5rem;
+      font-size: max(1.8rem, 18px);
+      opacity: 0.3;
+      letter-spacing: 0.02em;
+      line-height: 1.1;
+      user-select: none;
+      cursor: pointer;
+      margin-bottom: 3rem;
+
+      @include hoverable {
+        transition: opacity 0.2s;
+        &:hover {
+          opacity: 0.9;
+        }
+      }
+
+      &.active {
+        opacity: 0.9;
+      }
+    }
+  }
+</style>
+
+<script>
+  import { scroller } from '../scripts/scroller'
+
+  const list = document.querySelector<HTMLElement>('.layout > .lists')!
+
+  scroller.lenis.on('scroll', () => {
+    list.style.setProperty('--scroll-progress', scroller.lenis.progress.toString())
+  })
+</script>

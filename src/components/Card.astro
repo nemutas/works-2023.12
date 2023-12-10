@@ -1,0 +1,152 @@
+---
+import type { WorksBody } from '../scripts/server/newt'
+
+interface Props {
+  years: string[]
+  works: object & { [x: string]: WorksBody[] }
+}
+
+const { years, works } = Astro.props
+
+const list: WorksBody[] = []
+for (const year of years) {
+  list.push(...works[year])
+}
+---
+
+<div class="card">
+  <div class="image-container">
+    {
+      list.map((w, i) => (
+        <a id={`kv-${w._id}`} class:list={['image', i === 0 && 'current']} href={w.url} target="_blank" rel="noopener noreferrer">
+          <img src={w.kv.src} alt="" />
+        </a>
+      ))
+    }
+  </div>
+  <div class="divider"></div>
+  <div class="body">
+    {
+      list.map((w, i) => (
+        <div id={`text-${w._id}`} class:list={['body-container', i === 0 && 'current']}>
+          <p class="title">{w.title}</p>
+          <p class="year">{w.create}</p>
+        </div>
+      ))
+    }
+  </div>
+</div>
+
+<style lang="scss">
+  @use '../styles/mixins/media.scss' as *;
+
+  .card {
+    --image-progress: 0;
+
+    width: fit-content;
+    display: grid;
+    grid-template-columns: repeat(3, auto);
+    gap: 2rem;
+  }
+
+  .image-container {
+    position: relative;
+    margin-right: 0.5rem;
+    width: max(29rem, 290px);
+    aspect-ratio: 3 / 4;
+    display: grid;
+    place-items: center;
+
+    &::before {
+      content: '';
+      position: absolute;
+      z-index: -1;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: #fff;
+      opacity: 0.05;
+      transition:
+        opacity 0.5s,
+        scale 0.5s;
+    }
+
+    @include hoverable {
+      &:hover {
+        &::before {
+          opacity: 0.15;
+          scale: calc(1 - 0.03) calc(1 - 0.03 * 3 / 4);
+        }
+      }
+    }
+
+    .image {
+      position: absolute;
+      width: calc(100% - max(3rem, 30px));
+      height: calc(100% - max(3rem, 30px));
+      overflow: hidden;
+      display: none;
+
+      img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        will-change: transform;
+      }
+
+      &.current {
+        display: unset;
+        clip-path: inset(0 calc(100% * var(--image-progress)) 0 0);
+      }
+
+      &.next {
+        display: unset;
+        clip-path: inset(0 0 0 calc(100% * (1 - var(--image-progress))));
+      }
+    }
+  }
+
+  .divider {
+    height: 100%;
+    width: 1px;
+    background: #fff;
+    opacity: 0.2;
+  }
+
+  .body {
+    position: relative;
+    width: 25rem;
+    height: 100%;
+
+    .body-container {
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      display: none;
+
+      &.current {
+        display: unset;
+      }
+
+      &.next {
+        display: unset;
+      }
+
+      .title {
+        font-size: max(2.5rem, 25px);
+        opacity: 0.9;
+        line-height: 1;
+        padding-left: 0.5rem;
+        letter-spacing: 0.01em;
+      }
+      .year {
+        margin-top: 1.5rem;
+        font-size: max(1.6rem, 16px);
+        opacity: 0.3;
+        padding-left: 0.5rem;
+        letter-spacing: 0.01em;
+      }
+    }
+  }
+</style>

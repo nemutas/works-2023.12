@@ -1,0 +1,63 @@
+---
+import type { WorksBody } from '../scripts/server/newt'
+
+interface Props {
+  class?: string
+  year: string
+  works: WorksBody[]
+}
+
+const { class: className, year, works } = Astro.props
+---
+
+<ul class:list={['list', className]}>
+  <p class="year">{year}</p>
+  {
+    works.map((work) => (
+      <li data-id={work._id}>
+        <span>{work.title}</span>
+      </li>
+    ))
+  }
+</ul>
+
+<style lang="scss">
+  @use '../styles/mixins/media.scss' as *;
+
+  .year {
+    font-size: max(1.5rem, 15px);
+    opacity: 0.6;
+    margin-bottom: 0.8rem;
+    padding-left: 0.5rem;
+    user-select: none;
+  }
+
+  li {
+    padding-left: 0.5rem;
+    font-size: max(2rem, 20px);
+    opacity: 0.3;
+    letter-spacing: 0.02em;
+    text-overflow: ellipsis;
+    overflow: hidden;
+    white-space: nowrap;
+    line-height: 1.1;
+    user-select: none;
+    cursor: pointer;
+    + li {
+      padding-top: 0.3rem;
+    }
+    img {
+      display: none;
+    }
+    &.active {
+      opacity: 0.9;
+    }
+
+    @include hoverable {
+      transition: opacity 0.2s;
+      &:hover {
+        opacity: 0.9;
+      }
+    }
+  }
+</style>
